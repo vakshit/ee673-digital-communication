@@ -1,8 +1,9 @@
-import cv2
-import socket
 import pickle
-import struct
 import signal
+import socket
+import struct
+
+import cv2
 
 
 class VideoClient:

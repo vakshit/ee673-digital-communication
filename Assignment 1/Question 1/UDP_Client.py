@@ -1,12 +1,18 @@
 import socket
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server_address = ("172.17.59.20", 12000)
 
-message = input("Enter a message to send: ")
-client_socket.sendto(message.encode(), server_address)
+class UDP_Client:
+    def __init__(self, server_address: tuple) -> None:
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.server_address = server_address
 
-response, _ = client_socket.recvfrom(2048)
-print(f"Received response: {response.decode()}")
+    def send(self, message: str):
+        self.client_socket.sendto(message.encode(), self.server_address)
+        response, _ = self.client_socket.recvfrom(2048)
+        print(f"Received response: {response.decode()}")
+        self.client_socket.close()
 
-client_socket.close()
+
+if __name__ == "__main__":
+    client = UDP_Client(("localhost", 8080))
+    client.send(input("Enter message: "))

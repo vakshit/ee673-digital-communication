@@ -1,13 +1,24 @@
 import socket
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('localhost', 12000)
-client_socket.connect(server_address)
 
-message = input("Enter a message to send: ")  
-client_socket.send(message.encode())
-  
-response = client_socket.recv(2048)
-print(f"Received response: {response.decode()}")
+class TCP_Client:
+    def __init__(self):
+        # create client socket and connect to server
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_address = ("localhost", 8080)
 
-client_socket.close()
+    def start(self):
+        self.client_socket.connect(self.server_address)
+
+        # send message to server and receive response
+        self.client_socket.send(input("Enter message: ").encode())
+        response = self.client_socket.recv(2048)
+        print(f"Response: {response.decode()}")
+
+        # close connection after transaction
+        self.client_socket.close()
+
+
+if __name__ == "__main__":
+    client = TCP_Client()
+    client.start()

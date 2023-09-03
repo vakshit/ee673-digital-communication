@@ -1,8 +1,9 @@
-import cv2
-import socket
 import pickle
+import socket
 import struct
 import threading
+
+import cv2
 
 FRAME_RATE = 30
 
@@ -37,7 +38,7 @@ class VideoServer:
     def listen(self):
         while True:
             client, addr = self.server_socket.accept()
-            print(f"✅ {addr[0]}:{addr[1]}")
+            print(f"Connected: {addr[0]}:{addr[1]}")
             threading.Thread(
                 target=self.send,
                 args=(
@@ -52,12 +53,12 @@ class VideoServer:
                 client.sendall(self.payload)
             except (ConnectionResetError, BrokenPipeError):
                 client.close()
-                print(f"❌ Client {addr[0]}:{addr[1]} disconnected")
+                print(f"Disconnected: {addr[0]}:{addr[1]}")
                 break
 
     def start(self):
         self.server_socket.listen(self.max_clients)
-        print(f"📢 {self.socket_address[0]}:{self.socket_address[1]} [LISTENING]")
+        print(f"Start: {self.socket_address[0]}:{self.socket_address[1]} [LISTENING]")
         threading.Thread(target=self.capture).start()
         self.listen()
 
