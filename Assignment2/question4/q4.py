@@ -20,6 +20,11 @@ def simulate_tcp_fairness(RTT_ratio):
         else:
             flow1_rate += CONSTANT
             flow2_rate += CONSTANT / RTT_ratio
+        # if (abs(flow1_rate - flow1_rates[-1]) < 1) and (
+        #     abs(flow2_rate - flow2_rates[-1]) == 1
+        # ):
+        #     print("Converged in {} time steps".format(len(flow1_rates)))
+        #     break
         flow1_rates.append(flow1_rate)
         flow2_rates.append(flow2_rate)
 
@@ -35,8 +40,8 @@ plt.figure(figsize=(12, 6))
 
 plt.subplot(1, 2, 1)
 plt.plot(flow1_rates_same_RTT, flow2_rates_same_RTT, label="Same RTT")
-plt.plot([0, 0], [R, R], "k--", label="Convergence line")  # Convergence line
 plt.plot([R, 0], [0, R], "k--", label="Fairness Line")  # Fairness line
+plt.plot([0, R / 1.5], [0, R / 1.5], "--", label="Convergence line")  # Convergence line
 plt.scatter(
     [flow1_rates_same_RTT[0], flow1_rates_same_RTT[-1]],
     [flow2_rates_same_RTT[0], flow2_rates_same_RTT[-1]],
@@ -51,6 +56,7 @@ plt.legend()
 plt.subplot(1, 2, 2)
 plt.plot(flow1_rates_diff_RTT, flow2_rates_diff_RTT, label="Different RTT")
 plt.plot([R, 0], [0, R], "k--", label="Fairness Line")  # Fairness line
+plt.plot([0, R], [0, R / 10], "--", label="Convergence line")  # Convergence line
 plt.scatter(
     [flow1_rates_diff_RTT[0], flow1_rates_diff_RTT[-1]],
     [flow2_rates_diff_RTT[0], flow2_rates_diff_RTT[-1]],
